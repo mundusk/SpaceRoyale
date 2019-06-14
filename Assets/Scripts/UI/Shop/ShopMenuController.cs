@@ -5,8 +5,12 @@ using UnityEngine.UI;
 
 public class ShopMenuController : MonoBehaviour
 {
+    [SerializeField] AudioClip itemPurchaseAudio;
+    [SerializeField] [Range(0,1)] float itemPurchaseClipVolume = 0.7f;
+
     GameSessionController gameSession;
     ShopCoins shopCoins;
+    ShopFeedback shopFeedback;
     int lifePlusCost = 3;
     int reloadRocketCost = 1;
     int rocketPlusCost = 2;
@@ -17,6 +21,7 @@ public class ShopMenuController : MonoBehaviour
     {
         gameSession = FindObjectOfType<GameSessionController>();
         shopCoins = FindObjectOfType<ShopCoins>();
+        shopFeedback = FindObjectOfType<ShopFeedback>();
         
         UpdateShopCoins();
         SetupShopMenu();
@@ -99,14 +104,25 @@ public class ShopMenuController : MonoBehaviour
         menuItemImage.color = Color.gray;   
     }
 
+    private void PurchaseSuccessful()
+    {
+        AudioSource.PlayClipAtPoint(
+            itemPurchaseAudio,
+            Camera.main.transform.position,
+            itemPurchaseClipVolume);
+    }
+
     public void PurchaseLifePlus()
     {
         gameSession.Coins -= lifePlusCost;
         gameSession.Lives += 1;
         
+        PurchaseSuccessful();
         UpdateShopCoins();
         DisableLifePlus();
         CheckCoinAvailability();
+
+        shopFeedback.PurchaseInfo = "Life increased + 1!";
     }
 
     public void PurchaseReloadRocket()
@@ -114,10 +130,12 @@ public class ShopMenuController : MonoBehaviour
         gameSession.Coins -= reloadRocketCost;
         gameSession.Rockets = gameSession.MaxRockets;
 
+        PurchaseSuccessful();
         UpdateShopCoins();
         DisableReloadRocket();
         CheckCoinAvailability();
-        
+
+        shopFeedback.PurchaseInfo = "Rockets fully reloaded!";
     }
 
     public void PurchaseRocketPlus()
@@ -126,8 +144,11 @@ public class ShopMenuController : MonoBehaviour
         gameSession.MaxRockets += 1;
         gameSession.Rockets = gameSession.MaxRockets;
 
+        PurchaseSuccessful();
         UpdateShopCoins();
         CheckCoinAvailability();
+
+        shopFeedback.PurchaseInfo = "Rockets reloaded and max capacity + 1!";
     }
 
     public void PurchaseShieldTime()
@@ -141,8 +162,11 @@ public class ShopMenuController : MonoBehaviour
             DisableShieldTime();
         }
 
+        PurchaseSuccessful();
         UpdateShopCoins();
         CheckCoinAvailability();
+
+        shopFeedback.PurchaseInfo = "Shield recharge time decreased by 0.5!";
     }
 
     public void PurchaseMaxShield()
@@ -156,7 +180,10 @@ public class ShopMenuController : MonoBehaviour
             DisableMaxShield();
         }
 
+        PurchaseSuccessful();
         UpdateShopCoins();
         CheckCoinAvailability();
+
+        shopFeedback.PurchaseInfo = "Max shield + 10!";
     }
 }

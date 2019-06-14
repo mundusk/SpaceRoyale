@@ -7,15 +7,22 @@ public class CountdownUIController : MonoBehaviour
 {
     CountdownController countdown;
     Text countdownText;
+    Text roundText;
 
-    // Start is called before the first frame update
     void Start()
     {
         countdown = FindObjectOfType<CountdownController>();
-        countdownText = GetComponent<Text>();
+
+        GameObject countdownItem = GameObject.Find("CountdownText");
+        countdownText = countdownItem.GetComponent<Text>();
+
+        GameObject roundNumItem = GameObject.Find("RoundText");
+        roundText = roundNumItem.GetComponent<Text>();
+        roundText.text = string.Format(
+            "ROUND {0}",
+            FindObjectOfType<GameSessionController>().Round.ToString());
     }
 
-    // Update is called once per frame
     void Update()
     {
         int remainingSeconds = (int)countdown.RemainingTime;

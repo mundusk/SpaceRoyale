@@ -4,19 +4,30 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] GameObject basicShotObject;
-    [SerializeField] GameObject rocketObject;
+    [Header("Player Stats")]
     [SerializeField] int health = 100;
     [SerializeField] int maxHealth = 100;
     [SerializeField] int shield = 40;
     [SerializeField] int maxShield = 40;
     [SerializeField] int lives = 3;
+    [SerializeField] float movementSpeed = 8f;
+
+    [Header("Projectile Information")]
+    [SerializeField] GameObject basicShotObject;
+    [SerializeField] GameObject rocketObject;
     [SerializeField] int rockets = 3;
     [SerializeField] int maxRockets = 3;
-    [SerializeField] float movementSpeed = 8f;
     [SerializeField] float basicShotVelocity = 14.5f;
     [SerializeField] float rocketVelocity = 20f;
     [SerializeField] float rapidFireWaitDuration = 0.15f;
+
+    [Header("Audio")]
+    [SerializeField] AudioClip playerDieAudio;
+    [SerializeField] [Range(0,1)] float playerDieClipVolume = 0.7f;
+    [SerializeField] AudioClip playerFireProjectileAudio;
+    [SerializeField] [Range(0,1)] float playerBasicShotClipVolume = 0.2f;
+    [SerializeField] AudioClip playerFireRocketAudio;
+    [SerializeField] [Range(0,1)] float playerRocketClipVolume = 0.2f;
 
     Coroutine rapidFireCoroutine;
     GameSessionController gameSession;
@@ -43,6 +54,10 @@ public class PlayerController : MonoBehaviour
         LookDirection();
         FireProjectile();
         RechargeShield();
+
+        //TODO: Implement a more robust means of pausing the game
+        if(Input.GetButtonDown("Cancel"))
+            FindObjectOfType<GameManagerController>().LoadMainMenu();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -91,34 +106,31 @@ public class PlayerController : MonoBehaviour
         //Check if the new player position will exceed the world boundary
         if(deltaX < 0)
         {
-            if((transform.position.x + deltaX) < -28f)
-                newXPos = -28f;
+            if((transform.position.x + deltaX) < -32f)
+                newXPos = -32f;
             else
                 newXPos = transform.position.x + deltaX;
         } else if(deltaX > 0)
         {
-            if((transform.position.x + deltaX) > 28f)
-                newXPos = 28f;
+            if((transform.position.x + deltaX) > 32f)
+                newXPos = 32f;
             else
                 newXPos = transform.position.x + deltaX;
         }
 
-        //TODO: FIX THIS!!! Bounding the Y axis isn't working
         if(deltaY < 0)
         {
-            if((transform.position.y + deltaY) < 5f)
-                newYPos = 5f;
+            if((transform.position.y + deltaY) < -20f)
+                newYPos = -20f;
             else
                 newYPos = transform.position.y + deltaY;
         } else if(deltaY > 0)
         {
-            if((transform.position.y + deltaY) > -5f)
-                newYPos = -5f;
+            if((transform.position.y + deltaY) > 20f)
+                newYPos = 20f;
             else
                 newYPos = transform.position.y + deltaY;
         }
-
-        newYPos = transform.position.y + deltaY;
 
         transform.position = new Vector2(newXPos, newYPos);
     }
@@ -175,7 +187,7 @@ public class PlayerController : MonoBehaviour
             } else {
                 health = 0;
                 FindObjectOfType<GameManagerController>().PlayerDied();
-                Destroy(gameObject);
+                Die();
             }
         }
     }
@@ -194,12 +206,26 @@ public class PlayerController : MonoBehaviour
         health = maxHealth;
         shield = maxShield;
 
+        AudioSource.PlayClipAtPoint(
+            playerDieAudio,
+            Camera.main.transform.position,
+            playerDieClipVolume);
+
         transform.position = Vector2.zero;
     }
 
     private void FireRocket()
     {
         InstantiateProjectile("rocket");
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
+        AudioSource.PlayClipAtPoint(
+            playerDieAudio,
+            Camera.main.transform.position,
+            playerDieClipVolume);
     }
 
     IEnumerator RapidFire()
@@ -224,6 +250,10 @@ public class PlayerController : MonoBehaviour
             basicShot.GetComponent<Rigidbody2D>().velocity = new Vector2(
                 basicShot.transform.up.x * basicShotVelocity,
                 basicShot.transform.up.y * basicShotVelocity);
+            AudioSource.PlayClipAtPoint(
+                playerFireProjectileAudio,
+                Camera.main.transform.position,
+                playerBasicShotClipVolume);
         } else if (projectile == "rocket")
         {
             GameObject rocket = Instantiate(
@@ -234,6 +264,10 @@ public class PlayerController : MonoBehaviour
             rocket.GetComponent<Rigidbody2D>().velocity = new Vector2(
                 rocket.transform.up.x * rocketVelocity,
                 rocket.transform.up.y * rocketVelocity);
+            AudioSource.PlayClipAtPoint(
+                playerFireRocketAudio,
+                Camera.main.transform.position,
+                playerRocketClipVolume);
         }
     }
 

@@ -40,13 +40,15 @@ public class EnemySpawnController : MonoBehaviour
                 spawnWaitTime -= Time.deltaTime;
         }
     }
-
+    
     private void CalculateNumberOfEnemies()
     {
         numOfEnemiesThisRound = 2 * FindObjectOfType<GameSessionController>().Round + 2;
         enemyInfo.TotalEnemiesThisRound = numOfEnemiesThisRound;
     }
 
+    //TODO: Figure out bug that sometimes causes "extra" enemies to be spawned
+    //Also a possibility that enemies are sometimes not being destroyed.
     private void SpawnEnemy()
     {
         int randomPoint = Random.Range(0, enemySpawners.Count - 1);

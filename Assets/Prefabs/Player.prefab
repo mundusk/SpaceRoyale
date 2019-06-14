@@ -142,20 +142,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7988726b492e7244c97b96b88b26b75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  basicShotObject: {fileID: 2971474577908637448, guid: b46899578c32ea84192ab6af89fd67f2,
-    type: 3}
-  rocketObject: {fileID: 2655622653538098052, guid: 09ea35aa35b450f488017e629943e25b,
-    type: 3}
   health: 100
   maxHealth: 100
   shield: 40
   maxShield: 40
   lives: 3
-  rockets: 3
   movementSpeed: 8
+  basicShotObject: {fileID: 2971474577908637448, guid: b46899578c32ea84192ab6af89fd67f2,
+    type: 3}
+  rocketObject: {fileID: 2655622653538098052, guid: 09ea35aa35b450f488017e629943e25b,
+    type: 3}
+  rockets: 3
+  maxRockets: 3
   basicShotVelocity: 11.5
   rocketVelocity: 20
   rapidFireWaitDuration: 0.15
+  playerDieAudio: {fileID: 8300000, guid: 87e6726077c288d4c9f139522df8ad00, type: 3}
+  playerDieClipVolume: 0.8
+  playerFireProjectileAudio: {fileID: 8300000, guid: 3ede4d336ece3e5408422e256347692c,
+    type: 3}
+  playerBasicShotClipVolume: 0.05
+  playerFireRocketAudio: {fileID: 8300000, guid: 3b198bbeb34c9234e9ea98ff52061b77,
+    type: 3}
+  playerRocketClipVolume: 0.05
 --- !u!50 &1375570058296117318
 Rigidbody2D:
   serializedVersion: 4

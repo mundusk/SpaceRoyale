@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*The EnemyRadar class functions like a radar and keeps track of nearby ships. */
 public class EnemyRadar : MonoBehaviour
 {
     bool enemyDetected = false;

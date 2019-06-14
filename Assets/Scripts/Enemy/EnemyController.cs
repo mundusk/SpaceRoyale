@@ -2,20 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*The EnemyController object manages all of the Enemy GameObject in game
+movements and interactions except for detecting nearby enemies. */
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] GameObject basicShot;
     [SerializeField] GameObject coin;
+    
+    [Header("Enemy Stats")]
     [SerializeField] float health = 100f;
     [SerializeField] float movementSpeed = 6f;
-    [SerializeField] float basicShotVelocity = 14.5f;
     [SerializeField] float distanceToMaintain = 2.5f;
     [SerializeField] float distanceToRetreat = 1f;
+
+    [Header("Projectile Information")]
+    [SerializeField] GameObject basicShot;
+    [SerializeField] float basicShotVelocity = 14.5f;
     [SerializeField] float fireProjectileWaitTime = 0.25f;
 
+     [Header("Audio")]
+    [SerializeField] AudioClip enemyDieAudio;
+    [SerializeField] [Range(0,1)] float enemyDieClipVolume = 0.7f;
+    [SerializeField] AudioClip enemyBasicShotAudio;
+    [SerializeField] [Range(0,1)] float enemyBasicShotClipVolume = 0.2f;
+
     EnemyInfoController enemyInfo;
-    EnemyRadar enemyRadar;
-    Transform targetEnemy;
+    EnemyRadar enemyRadar; //Used to track enemy ships and know when to attack.
+    Transform targetEnemy; //The ship to currently focus attacks on.
     Transform targetWaypoint;
     List<Transform> waypointPositions = new List<Transform>();
     float fireProjectileCountdown = 0f;
@@ -44,10 +56,11 @@ public class EnemyController : MonoBehaviour
                 MoveToWaypoint();
             }
         } else {
-            //TODO: Potentially update later to finding most vulnerable enemy, considering HP value
             targetEnemy = enemyRadar.IdentifyNearestEnemy();
             
             //TODO: Investigate issue with updating radar when an enemy is destroyed
+            //If the player is a certain distance within the radar after the enemy destroys
+            //another ship, it will not detect the player ship.
             if(targetEnemy != null)
                 Attack();
             else
@@ -92,7 +105,8 @@ public class EnemyController : MonoBehaviour
             }
             
             enemyInfo.EnemiesDefeatedThisRound++;
-            Destroy(gameObject);
+
+            Die();
         }
     }
 
@@ -137,6 +151,7 @@ public class EnemyController : MonoBehaviour
         FireProjectile();
     }
 
+    //Adjust up vector to face targetEnemy
     private void LookDirection()
     {
         Vector2 direction = new Vector2(targetEnemy.position.x - transform.position.x,
@@ -160,7 +175,22 @@ public class EnemyController : MonoBehaviour
                 projectile.transform.up.x * basicShotVelocity,
                 projectile.transform.up.y * basicShotVelocity);
             
+            AudioSource.PlayClipAtPoint(
+                enemyBasicShotAudio,
+                transform.position,
+                enemyDieClipVolume);
+            
             fireProjectileCountdown = fireProjectileWaitTime;
         }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
+
+        AudioSource.PlayClipAtPoint(
+            enemyDieAudio,
+            transform.position,
+            enemyDieClipVolume);
     }
 }

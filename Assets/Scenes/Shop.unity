@@ -2266,6 +2266,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06864209e5d5f73468765f7eecea1d7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemPurchaseAudio: {fileID: 8300000, guid: 92694ebf3479fdb49ac96424fb867484, type: 3}
+  itemPurchaseClipVolume: 0.1
 --- !u!1 &1250159880
 GameObject:
   m_ObjectHideFlags: 0

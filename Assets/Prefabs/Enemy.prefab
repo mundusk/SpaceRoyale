@@ -155,15 +155,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579edd6a3fbf09a4aaadaeba293e930f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  basicShot: {fileID: 8178676065089574562, guid: a300adef4bad3eb49a1997e535e480be,
-    type: 3}
   coin: {fileID: 867473467636131090, guid: 4372732d0cb73374f896a9881c2a39ab, type: 3}
   health: 100
   movementSpeed: 6
-  basicShotVelocity: 11.5
   distanceToMaintain: 5
   distanceToRetreat: 3
+  basicShot: {fileID: 8178676065089574562, guid: a300adef4bad3eb49a1997e535e480be,
+    type: 3}
+  basicShotVelocity: 11.5
   fireProjectileWaitTime: 0.25
+  enemyDieAudio: {fileID: 8300000, guid: ea777f25e237a37478ed237fb02dd542, type: 3}
+  enemyDieClipVolume: 0.9
+  enemyBasicShotAudio: {fileID: 8300000, guid: 889a5787f61330d4aafb35fc14d89958, type: 3}
+  enemyBasicShotClipVolume: 0.025
 --- !u!58 &8809350354946396457
 CircleCollider2D:
   m_ObjectHideFlags: 0
