@@ -13,8 +13,8 @@ public class GameOverUIScript : MonoBehaviour
     {
         GameObject scoreObject = GameObject.Find("ScoreText");
         playerScore = scoreObject.GetComponent<Text>();
-        score = FindObjectOfType<GameSessionController>().Score;
-        finalScore = score + (FindObjectOfType<GameSessionController>().Coins * 5);
+        score = GameSessionController.Instance.Score;
+        finalScore = score + (GameSessionController.Instance.Coins * 5);
 
         playerScore.text = finalScore.ToString();    
     }

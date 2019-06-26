@@ -8,7 +8,6 @@ public class ShopMenuController : MonoBehaviour
     [SerializeField] AudioClip itemPurchaseAudio;
     [SerializeField] [Range(0,1)] float itemPurchaseClipVolume = 0.7f;
 
-    GameSessionController gameSession;
     ShopCoins shopCoins;
     ShopFeedback shopFeedback;
     int lifePlusCost = 3;
@@ -19,7 +18,6 @@ public class ShopMenuController : MonoBehaviour
 
     void Start()
     {
-        gameSession = FindObjectOfType<GameSessionController>();
         shopCoins = FindObjectOfType<ShopCoins>();
         shopFeedback = FindObjectOfType<ShopFeedback>();
         
@@ -30,39 +28,39 @@ public class ShopMenuController : MonoBehaviour
 
     private void SetupShopMenu()
     {
-        if(gameSession.Lives == 3)
+        if(GameSessionController.Instance.Lives == 3)
             DisableLifePlus();
 
-        if(gameSession.Rockets == gameSession.MaxRockets)
+        if(GameSessionController.Instance.Rockets == GameSessionController.Instance.MaxRockets)
             DisableReloadRocket();
 
-        if(gameSession.ShieldRechargeTime <= 1f)
+        if(GameSessionController.Instance.ShieldRechargeTime <= 1f)
             DisableShieldTime();
 
-        if(gameSession.Shield == 100)
+        if(GameSessionController.Instance.Shield == 100)
             DisableMaxShield();
     }
 
     private void UpdateShopCoins()
     {
-        shopCoins.CurrentCoins = gameSession.Coins;
+        shopCoins.CurrentCoins = GameSessionController.Instance.Coins;
     }
 
     private void CheckCoinAvailability()
     {
-        if(gameSession.Coins < lifePlusCost)
+        if(GameSessionController.Instance.Coins < lifePlusCost)
             DisableLifePlus();
         
-        if(gameSession.Coins < reloadRocketCost)
+        if(GameSessionController.Instance.Coins < reloadRocketCost)
             DisableReloadRocket();
         
-        if(gameSession.Coins < rocketPlusCost)
+        if(GameSessionController.Instance.Coins < rocketPlusCost)
             DisableRocketPlus();
         
-        if(gameSession.Coins < shieldTimeCost)
+        if(GameSessionController.Instance.Coins < shieldTimeCost)
             DisableShieldTime();
         
-        if(gameSession.Coins < maxShieldCost)
+        if(GameSessionController.Instance.Coins < maxShieldCost)
             DisableMaxShield();
     }
 
@@ -114,8 +112,8 @@ public class ShopMenuController : MonoBehaviour
 
     public void PurchaseLifePlus()
     {
-        gameSession.Coins -= lifePlusCost;
-        gameSession.Lives += 1;
+        GameSessionController.Instance.Coins -= lifePlusCost;
+        GameSessionController.Instance.Lives += 1;
         
         PurchaseSuccessful();
         UpdateShopCoins();
@@ -127,8 +125,8 @@ public class ShopMenuController : MonoBehaviour
 
     public void PurchaseReloadRocket()
     {
-        gameSession.Coins -= reloadRocketCost;
-        gameSession.Rockets = gameSession.MaxRockets;
+        GameSessionController.Instance.Coins -= reloadRocketCost;
+        GameSessionController.Instance.Rockets = GameSessionController.Instance.MaxRockets;
 
         PurchaseSuccessful();
         UpdateShopCoins();
@@ -140,9 +138,9 @@ public class ShopMenuController : MonoBehaviour
 
     public void PurchaseRocketPlus()
     {
-        gameSession.Coins -= rocketPlusCost;
-        gameSession.MaxRockets += 1;
-        gameSession.Rockets = gameSession.MaxRockets;
+        GameSessionController.Instance.Coins -= rocketPlusCost;
+        GameSessionController.Instance.MaxRockets += 1;
+        GameSessionController.Instance.Rockets = GameSessionController.Instance.MaxRockets;
 
         PurchaseSuccessful();
         UpdateShopCoins();
@@ -153,12 +151,12 @@ public class ShopMenuController : MonoBehaviour
 
     public void PurchaseShieldTime()
     {
-        gameSession.Coins -= shieldTimeCost;
-        gameSession.ShieldRechargeTime -= 0.5f;
+        GameSessionController.Instance.Coins -= shieldTimeCost;
+        GameSessionController.Instance.ShieldRechargeTime -= 0.5f;
 
-        if(gameSession.ShieldRechargeTime <= 1f)
+        if(GameSessionController.Instance.ShieldRechargeTime <= 1f)
         {
-            gameSession.ShieldRechargeTime = 1f;
+            GameSessionController.Instance.ShieldRechargeTime = 1f;
             DisableShieldTime();
         }
 
@@ -171,12 +169,12 @@ public class ShopMenuController : MonoBehaviour
 
     public void PurchaseMaxShield()
     {
-        gameSession.Coins -= maxShieldCost;
-        gameSession.Shield += 10;
+        GameSessionController.Instance.Coins -= maxShieldCost;
+        GameSessionController.Instance.Shield += 10;
 
-        if(gameSession.Shield >= 100)
+        if(GameSessionController.Instance.Shield >= 100)
         {
-            gameSession.Shield = 100;
+            GameSessionController.Instance.Shield = 100;
             DisableMaxShield();
         }
 

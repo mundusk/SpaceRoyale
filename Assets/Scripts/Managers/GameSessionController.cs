@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameSessionController : MonoBehaviour
 {
-    //public static GameSessionController Instance { get; private set;}
+    public static GameSessionController Instance;
 
     int round = 1;
     int lives = 3;
@@ -77,12 +77,14 @@ public class GameSessionController : MonoBehaviour
 
     private void MakeSingleton()
     {
-        int gameSessionsAvailable = FindObjectsOfType<GameSessionController>().Length;
-
-        if(gameSessionsAvailable > 1)
-            Destroy(gameObject);
-        else
+        if(Instance == null)
+        {
             DontDestroyOnLoad(gameObject);
+            Instance = this;
+        } else if(Instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void ResetValues()

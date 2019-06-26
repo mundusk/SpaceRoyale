@@ -99,8 +99,8 @@ public class EnemyController : MonoBehaviour
             {
                 if(collidedObject.FiredBy.tag == "Player")
                 {
-                    FindObjectOfType<GameSessionController>().Score += 10;
-                    FindObjectOfType<GameSessionController>().EnemiesDefeated += 1;
+                    GameSessionController.Instance.Score += 10;
+                    GameSessionController.Instance.EnemiesDefeated += 1;
                 }
             }
             

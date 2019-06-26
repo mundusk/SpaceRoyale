@@ -20,7 +20,7 @@ public class CountdownUIController : MonoBehaviour
         roundText = roundNumItem.GetComponent<Text>();
         roundText.text = string.Format(
             "ROUND {0}",
-            FindObjectOfType<GameSessionController>().Round.ToString());
+            GameSessionController.Instance.Round);
     }
 
     void Update()

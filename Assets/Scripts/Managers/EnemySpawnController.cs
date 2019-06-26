@@ -43,7 +43,7 @@ public class EnemySpawnController : MonoBehaviour
     
     private void CalculateNumberOfEnemies()
     {
-        numOfEnemiesThisRound = 2 * FindObjectOfType<GameSessionController>().Round + 2;
+        numOfEnemiesThisRound = 2 * GameSessionController.Instance.Round + 2;
         enemyInfo.TotalEnemiesThisRound = numOfEnemiesThisRound;
     }
 

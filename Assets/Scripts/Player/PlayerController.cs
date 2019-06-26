@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(0,1)] float playerRocketClipVolume = 0.2f;
 
     Coroutine rapidFireCoroutine;
-    GameSessionController gameSession;
     float shieldRechargeWaitTime = 10f;
     float timeSinceDamageTaken = 0f;
 
@@ -76,7 +75,7 @@ public class PlayerController : MonoBehaviour
 
         if(other.transform.tag == "Coin")
         {
-            gameSession.Coins += 1;
+            GameSessionController.Instance.Coins += 1;
 
             Destroy(other.gameObject);
         }
@@ -84,14 +83,12 @@ public class PlayerController : MonoBehaviour
 
     private void GetCurrentPlayerStats()
     {
-        gameSession = FindObjectOfType<GameSessionController>();
-
-        lives = gameSession.Lives;
-        shieldRechargeWaitTime = gameSession.ShieldRechargeTime;
-        maxShield = gameSession.Shield;
+        lives = GameSessionController.Instance.Lives;
+        shieldRechargeWaitTime = GameSessionController.Instance.ShieldRechargeTime;
+        maxShield = GameSessionController.Instance.Shield;
         shield = maxShield;
-        rockets = gameSession.Rockets;
-        maxRockets = gameSession.MaxRockets;
+        rockets = GameSessionController.Instance.Rockets;
+        maxRockets = GameSessionController.Instance.MaxRockets;
     }
 
     private void Move()
@@ -273,7 +270,7 @@ public class PlayerController : MonoBehaviour
 
     public void SavePlayerStats()
     {
-        gameSession.Lives = lives;
-        gameSession.Rockets = rockets;
+        GameSessionController.Instance.Lives = lives;
+        GameSessionController.Instance.Rockets = rockets;
     }
 }

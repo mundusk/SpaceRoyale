@@ -50,13 +50,13 @@ public class GameManagerController : MonoBehaviour
 
     public void NextRound()
     {
-        FindObjectOfType<GameSessionController>().Round += 1;
+        GameSessionController.Instance.Round += 1;
         LoadLevel();
     }
 
     public void Retry()
     {
-        FindObjectOfType<GameSessionController>().ResetValues();
+        GameSessionController.Instance.ResetValues();
         LoadLevel();
     }
 
